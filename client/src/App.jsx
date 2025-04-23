@@ -1,16 +1,30 @@
 import { useState } from "react";
 import { Navbar, Footer } from "./components";
-import { AllProducts, Home, ProductCategory, ProductDetails } from "./pages";
+import {
+  AddAddress,
+  AllProducts,
+  Cart,
+  Home,
+  ProductCategory,
+  ProductDetails,
+  MyOrders,
+  SellerLayout,
+  AddProduct,
+  ProductList,
+  Orders
+} from "./pages";
 import { Route, Routes, useLocation } from "react-router-dom";
 import { Toaster } from "react-hot-toast";
 import { useAppContext } from "./context/AppContext";
 import { Login } from "./components";
+import SellerLogin from "./components/seller/SellerLogin";
+
 function App() {
   const isSellerPath = useLocation().pathname.includes("seller");
   const [count, setCount] = useState(0);
-  const { showUserLogin } = useAppContext();
+  const { showUserLogin, isSeller } = useAppContext();
   return (
-    <>
+    <div className="text-default min-h-screen text-gray-700 bg-white">
       <div>
         {isSellerPath ? null : <Navbar />}
         {showUserLogin ? <Login /> : null}
@@ -26,11 +40,22 @@ function App() {
               path="/products/:category/:id"
               element={<ProductDetails />}
             />
+            <Route path="/cart" element={<Cart />} />
+            <Route path="/add-address" element={<AddAddress />} />
+            <Route path="/my-orders" element={<MyOrders />} />
+            <Route
+              path="/seller"
+              element={isSeller ? <SellerLayout /> : <SellerLogin />}
+            >
+              <Route index element={isSeller ? <AddProduct /> : null} />
+              <Route path="product-list" element={<ProductList />} />
+              <Route path="orders" element={<Orders />} />
+            </Route>
           </Routes>
         </div>
         {!isSellerPath && <Footer />}
       </div>
-    </>
+    </div>
   );
 }
 
