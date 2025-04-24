@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { assets } from "../../assets/assets";
+import { assets, categories } from "../../assets/assets";
 
 function AddProduct() {
   const [files, setFiles] = useState([]);
@@ -61,6 +61,8 @@ function AddProduct() {
             placeholder="Type here"
             className="outline-none md:py-2.5 py-2 px-3 rounded border border-gray-500/40"
             required
+            onChange={(e) => setName(e.target.value)}
+            value={name}
           />
         </div>
         <div className="flex flex-col gap-1 max-w-md">
@@ -75,6 +77,8 @@ function AddProduct() {
             rows={4}
             className="outline-none md:py-2.5 py-2 px-3 rounded border border-gray-500/40 resize-none"
             placeholder="Type here"
+            onChange={(e) => setDescription(e.target.value)}
+            value={description}
           ></textarea>
         </div>
         <div className="w-full flex flex-col gap-1">
@@ -84,15 +88,22 @@ function AddProduct() {
           <select
             id="category"
             className="outline-none md:py-2.5 py-2 px-3 rounded border border-gray-500/40"
+            onChange={(e) => setCategory(e.target.value)}
           >
-            <option value="">Select Category</option>
-            {[
+            <option value={category}>Select Category</option>
+            {/* {[
               { name: "Electronics" },
               { name: "Clothing" },
               { name: "Accessories" }
             ].map((item, index) => (
               <option key={index} value={item.name}>
                 {item.name}
+              </option>
+            ))}
+             */}
+            {categories.map((item, index) => (
+              <option key={index} value={item?.path}>
+                {item?.path}
               </option>
             ))}
           </select>
@@ -108,6 +119,8 @@ function AddProduct() {
               placeholder="0"
               className="outline-none md:py-2.5 py-2 px-3 rounded border border-gray-500/40"
               required
+              onChange={(e) => setPrice(e.target.value)}
+              value={price}
             />
           </div>
           <div className="flex-1 flex flex-col gap-1 w-32">
@@ -120,10 +133,12 @@ function AddProduct() {
               placeholder="0"
               className="outline-none md:py-2.5 py-2 px-3 rounded border border-gray-500/40"
               required
+              onChange={(e) => setOfferPrice(e.target.value)}
+              value={offerPrice}
             />
           </div>
         </div>
-        <button className="px-8 py-2.5 bg-primary text-white font-medium rounded">
+        <button className="px-8 py-2.5 bg-primary text-white font-medium rounded cursor-pointer">
           ADD
         </button>
       </form>
