@@ -29,7 +29,7 @@ export const sellerLogin = async (req, res) => {
 
 export const isSellerAuth = async (req, res) => {
   try {
-    return res.json({ succes: true });
+    return res.json({ success: true });
   } catch (error) {
     console.log(error.message);
     res.json({ succes: false, message: error.message });
@@ -38,12 +38,12 @@ export const isSellerAuth = async (req, res) => {
 
 export const sellerLogout = async (req, res) => {
   try {
-    res.clearCookies("sellerToken", {
+    res.clearCookie("sellerToken", {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
       sameSite: process.env.NODE_ENV === "production" ? "none" : "strict"
     });
-    return res.json({ succes: true, message: "Logged Out" });
+    res.json({ success: true, message: "Logged Out" });
   } catch (error) {
     console.log(error.message);
     res.json({ succes: false, message: error.message });

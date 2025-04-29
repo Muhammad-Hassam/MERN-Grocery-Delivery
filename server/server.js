@@ -13,13 +13,17 @@ import orderRouter from "./routes/orderRoute.js";
 
 const app = express();
 const port = process.env.PORT || 4000;
-const allowedOrigins = ["http://localhost:5173/"];
 await connectDB();
 await connectCloudinary();
 
 app.use(express.json());
 app.use(cookieParser());
-app.use(cors({ origin: allowedOrigins, credential: true }));
+app.use(
+  cors({
+    origin: "http://localhost:5173",
+    credentials: true
+  })
+);
 
 app.use("/api/user", userRouter);
 app.use("/api/seller", sellerRouter);
