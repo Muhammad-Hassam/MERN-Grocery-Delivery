@@ -9,7 +9,7 @@ export const placeOrderCOD = async (req, res) => {
     }
     let amount = await items.reduce(async (acc, item) => {
       const product = await Product.findById(item.product);
-      (await acc) + product.offerPrice * item.quantity;
+      return (await acc) + product.offerPrice * item.quantity;
     }, 0);
     amount += Math.floor(amount * 0.02);
     await Order.create({
@@ -27,7 +27,7 @@ export const placeOrderCOD = async (req, res) => {
 
 export const getUserOrder = async (req, res) => {
   try {
-    const { userId } = req.body;
+    const { userId } = req.query;
     const orders = await Order.find({
       userId,
       $or: [{ paymentType: "COD" }, { isPaid: true }]
@@ -47,6 +47,7 @@ export const getAllOrders = async (req, res) => {
     })
       .populate("items.product address")
       .sort({ createdAt: -1 });
+    return res.json({ success: true, orders });
   } catch (error) {
     res.json({ success: false, message: error.message });
   }

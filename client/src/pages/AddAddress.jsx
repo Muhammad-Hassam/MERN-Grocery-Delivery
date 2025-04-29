@@ -1,5 +1,7 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { assets } from "../assets/assets";
+import { useAppContext } from "../context/AppContext";
+import toast from "react-hot-toast";
 
 const InputField = ({ type, placeholder, name, handleChange, address }) => (
   <input
@@ -14,6 +16,7 @@ const InputField = ({ type, placeholder, name, handleChange, address }) => (
 );
 
 function AddAddress() {
+  const { axios, user, navigate } = useAppContext();
   const [address, setAddress] = useState({
     firstName: "",
     lastName: "",
@@ -28,14 +31,34 @@ function AddAddress() {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setAddress((preventDefault) => ({
+    setAddress((prevAddress) => ({
       ...prevAddress,
       [name]: value
     }));
   };
   const onSubmitHandler = async (e) => {
     e.preventDefault();
+    try {
+      const { data } = await axios.post("/api/address/add", {
+        userId: user._id,
+        address
+      });
+      if (data.success) {
+        toast.success(data.message);
+        navigate("/cart");
+      } else {
+        toast.error(data.message);
+      }
+    } catch (error) {
+      toast.error(error.message);
+    }
   };
+
+  useEffect(() => {
+    if (!user) {
+      navigate("/cart");
+    }
+  }, []);
 
   return (
     <div className="mt-16 pb-16">
@@ -49,14 +72,14 @@ function AddAddress() {
             <div className="grid grid-cols-2 gap-4">
               <InputField
                 handleChange={handleChange}
-                address={address}
+                address={address.firstName}
                 name="firstName"
                 type="text"
                 placeholder="First Name"
               />
               <InputField
                 handleChange={handleChange}
-                address={address}
+                address={address.lastName}
                 name="lastName"
                 type="text"
                 placeholder="Last Name"
@@ -65,14 +88,14 @@ function AddAddress() {
 
             <InputField
               handleChange={handleChange}
-              address={address}
+              address={address.email}
               name="email"
               type="email"
               placeholder="Email"
             />
             <InputField
               handleChange={handleChange}
-              address={address}
+              address={address.street}
               name="street"
               type="text"
               placeholder="Street"
@@ -80,14 +103,14 @@ function AddAddress() {
             <div className="grid grid-cols-2 gap-4">
               <InputField
                 handleChange={handleChange}
-                address={address}
+                address={address.city}
                 name="city"
                 type="text"
                 placeholder="City"
               />
               <InputField
                 handleChange={handleChange}
-                address={address}
+                address={address.state}
                 name="state"
                 type="text"
                 placeholder="State"
@@ -96,22 +119,22 @@ function AddAddress() {
             <div className="grid grid-cols-2 gap-4">
               <InputField
                 handleChange={handleChange}
-                address={address}
+                address={address.zipcode}
                 name="zipcode"
                 type="number"
                 placeholder="Zip code"
               />
               <InputField
                 handleChange={handleChange}
-                address={address}
+                address={address.country}
                 name="country"
-                type="number"
+                type="text"
                 placeholder="Country"
               />
             </div>
             <InputField
               handleChange={handleChange}
-              address={address}
+              address={address.phone}
               name="phone"
               type="text"
               placeholder="Phone"
