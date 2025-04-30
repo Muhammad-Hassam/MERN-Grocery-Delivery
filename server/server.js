@@ -18,7 +18,7 @@ await connectDB();
 await connectCloudinary();
 
 app.use("/stripe", express.raw({ type: "application/json" }), stripeWebhooks);
-
+app.get("/", (req, res) => res.send("Api is Working"));
 app.use(express.json());
 app.use(cookieParser());
 app.use(
