@@ -6,7 +6,7 @@ import BottomBanner from "./BottomBanner";
 import NewsLetter from "./NewsLetter";
 import Footer from "./Footer";
 import Login from "./Login";
-
+import Loading from "./Loading";
 export {
   Navbar,
   Categories,
@@ -15,5 +15,6 @@ export {
   BottomBanner,
   NewsLetter,
   Footer,
-  Login
+  Login,
+  Loading
 };
