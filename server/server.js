@@ -23,8 +23,8 @@ app.use(express.json());
 app.use(cookieParser());
 app.use(
   cors({
-    origin: "https://mern-grocery-delivery.vercel.app",
-    credentials: true
+    credentials: true,
+    origin: "https://mern-grocery-delivery-q2s2.vercel.app"
   })
 );
 
