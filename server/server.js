@@ -23,10 +23,7 @@ app.use(express.json());
 app.use(cookieParser());
 app.use(
   cors({
-    origin: [
-      "http://localhost:5173",
-      "https://mern-grocery-delivery.vercel.app"
-    ],
+    origin: "https://mern-grocery-delivery.vercel.app",
     credentials: true
   })
 );
