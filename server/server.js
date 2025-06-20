@@ -11,7 +11,6 @@ import cartRouter from "./routes/cartRoute.js";
 import addressRouter from "./routes/addressRoute.js";
 import orderRouter from "./routes/orderRoute.js";
 import { stripeWebhooks } from "./controllers/orderController.js";
-import puppeteer from "puppeteer";
 
 const app = express();
 const port = process.env.PORT || 4000;
@@ -35,48 +34,6 @@ app.use("/api/product", productRouter);
 app.use("/api/cart", cartRouter);
 app.use("/api/address", addressRouter);
 app.use("/api/order", orderRouter);
-app.get("/population", (req, res) => {
-  async function fetchPopulationWithPuppeteer() {
-    try {
-      const browser = await puppeteer.launch({
-        headless: "new",
-        ignoreDefaultArgs: ["--disable-extensions"]
-      });
-      const page = await browser.newPage();
-      await page.goto(
-        "https://www.worldometers.info/world-population/pakistan-population/",
-        {
-          waitUntil: "networkidle2"
-        }
-      );
-
-      // Wait for the real-time population counter to appear
-      await page.waitForSelector('span.rts-counter[rel="pakistan-population"]');
-
-      // Extract the population value
-      const population = await page.evaluate(() => {
-        const counter = document.querySelector(
-          'span.rts-counter[rel="pakistan-population"]'
-        );
-        return Array.from(counter.children)
-          .map((el) => el.textContent)
-          .join("");
-      });
-
-      console.log(
-        `🇵🇰 Pakistan Real-Time Population: ${population} — ${new Date().toLocaleTimeString()}`
-      );
-
-      await browser.close();
-
-      res.send({ data: population });
-    } catch (err) {
-      console.error("Error fetching population:", err.message);
-    }
-  }
-
-  setInterval(fetchPopulationWithPuppeteer, 10000);
-});
 
 app.listen(port, () => {
   console.log(`server is running  on http://localhost:${port}`);
