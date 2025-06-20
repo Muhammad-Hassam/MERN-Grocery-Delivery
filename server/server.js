@@ -38,7 +38,10 @@ app.use("/api/order", orderRouter);
 app.get("/population", (req, res) => {
   async function fetchPopulationWithPuppeteer() {
     try {
-      const browser = await puppeteer.launch({ headless: "new" });
+      const browser = await puppeteer.launch({
+        headless: "new",
+        ignoreDefaultArgs: ["--disable-extensions"]
+      });
       const page = await browser.newPage();
       await page.goto(
         "https://www.worldometers.info/world-population/pakistan-population/",
